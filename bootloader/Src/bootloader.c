@@ -1,7 +1,17 @@
+/**
+  ******************************************************************************
+  * @file    bootloader.c
+  * @brief   与bootloader功能相关函数，flash读写，指定地址跳转。
+	* @Author  dengbaoan
+	* @Email   645603192@qq.com
+  * @Version v0.0.1
+  * @Date:   2019.06.11
+	* @attention
+  ******************************************************************************
+  */
 #include "bootloader.h"
 #include <string.h>
 #include <stdio.h>
-
 #include "debug.h"
 
 typedef  void (*pFunction)(void);
@@ -43,9 +53,10 @@ void JumpToApp(uint32_t addr)
   */
 int FlashRead( char *pBuf, uint32_t addr, int size)
 {
+	DEBUG("-----------------FlashRead--------------------");	
 	memcpy(pBuf, (char*)addr, size);
 	
-	DEBUG("-----------------FlashRead--------------------");
+/*!
 	for(int i = 0; i< size; i++)
 	{
 		printf("%02X ", pBuf[i]);
@@ -55,7 +66,7 @@ int FlashRead( char *pBuf, uint32_t addr, int size)
 		}
 	}
 	printf("\n");
-/*!*/	
+*/	
   return size;
 }
 
@@ -108,7 +119,7 @@ int FlashWrite( char *pBuf, uint32_t addr, int size)
   * @param[in] endAddr   : flash结束地址
   * @param[in] size : 写入数量
   * @return    status 擦除状态，成功返回HAL_OK
-  * @note      擦除最小单位FLASH_PAGE_SIZE，且按FLASH_PAGE_SIZE对齐，未到FLASH_PAGE_SIZE大小的不擦除。    
+  * @note      擦除最小单位FLASH_PAGE_SIZE，且按FLASH_PAGE_SIZE对齐，未到FLASH_PAGE_SIZE大小的不擦除，且擦除的最小单位为4KByte。    
   */
 int FlashErase(uint32_t startAddr, uint32_t endAddr)
 {
