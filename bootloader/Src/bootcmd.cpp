@@ -289,12 +289,10 @@ static bool WritePrivateData(char *pBuf, int size, uint32_t offset)
 	bool bRet = true;
 	
   char *pTempBuff = (char *)malloc(PRIVATE_DATA_OFFSET_MAX);
-	if (!pTempBuff)
-	{
-		ERROR("malloc pTempBuff failed.");
-	}    
+	assert(pTempBuff != NULL);
 	
-	memset(pTempBuff, 0, PRIVATE_DATA_OFFSET_MAX);
+	pTempBuff = (char*)memset(pTempBuff, 0, PRIVATE_DATA_OFFSET_MAX);
+	assert(pTempBuff != NULL);
 	
 	/*! step 1 */
 	FlashRead( pTempBuff, PRIVATE_DATA_BASE_ADDRESS, PRIVATE_DATA_OFFSET_MAX);
@@ -359,13 +357,14 @@ static bool CrcVerify()
 static void RunCmdJumpToApp()
 {
 #if 1	
-	char *pTempBuff = (char *)malloc(8192);
+	const int readSize = 2048;
+	char *pTempBuff = (char *)malloc(readSize);
 	assert(pTempBuff != NULL);
 	
-	pTempBuff =(char*)memset(pTempBuff, 0, 8192);
+	pTempBuff =(char*)memset(pTempBuff, 0, readSize);
 	assert(pTempBuff != NULL);
 	
-	FlashRead((char*)pTempBuff, APP_BASE_ADDRESS, 8192);
+	FlashRead((char*)pTempBuff, APP_BASE_ADDRESS, readSize);
 	
 	free(pTempBuff);
 	pTempBuff = NULL;

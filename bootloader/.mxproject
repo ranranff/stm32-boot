@@ -1,7 +1,7 @@
 [PreviousGenFiles]
-HeaderPath=F:/stm32/bootloader/Inc
+HeaderPath=F:/stm32/stm32-boot/bootloader/Inc
 HeaderFiles=gpio.h;dma.h;usart.h;stm32f1xx_it.h;stm32f1xx_hal_conf.h;main.h;crc.h;
-SourcePath=F:/stm32/bootloader/Src
+SourcePath=F:/stm32/stm32-boot/bootloader/Src
 SourceFiles=gpio.c;dma.c;usart.c;stm32f1xx_it.c;stm32f1xx_hal_msp.c;main.c;crc.c;
 
 [PreviousLibFiles]
