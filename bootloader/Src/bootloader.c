@@ -41,11 +41,10 @@ void JumpToApp(uint32_t addr)
   * @param[in] size : 读取数量
   * @return    成功读到pBuf中的数据量。  
   */
-uint8_t FlashRead( char *pBuf, uint32_t addr, int size)
+int FlashRead( char *pBuf, uint32_t addr, int size)
 {
 	memcpy(pBuf, (char*)addr, size);
 	
- 	
 	DEBUG("-----------------FlashRead--------------------");
 	for(int i = 0; i< size; i++)
 	{
@@ -67,7 +66,7 @@ uint8_t FlashRead( char *pBuf, uint32_t addr, int size)
   * @return    成功写入数量
   * @warning   起始地址必须是16bit对齐，即写入必须按16位地址开始写入。   
   */
-uint8_t FlashWrite( char *pBuf, uint32_t addr, int size)
+int FlashWrite( char *pBuf, uint32_t addr, int size)
 {
 	if ( addr%2 != 0)
 	{
@@ -111,7 +110,7 @@ uint8_t FlashWrite( char *pBuf, uint32_t addr, int size)
   * @return    status 擦除状态，成功返回HAL_OK
   * @note      擦除最小单位FLASH_PAGE_SIZE，且按FLASH_PAGE_SIZE对齐，未到FLASH_PAGE_SIZE大小的不擦除。    
   */
-uint8_t FlashErase(uint32_t startAddr, uint32_t endAddr)
+int FlashErase(uint32_t startAddr, uint32_t endAddr)
 {
 		HAL_FLASH_Unlock();
 

@@ -8,9 +8,9 @@ extern "C" {
 #endif
 
 void    JumpToApp(uint32_t addr);
-uint8_t FlashRead( char *pBuf, uint32_t addr, int size);
-uint8_t FlashWrite( char *pBuf, uint32_t addr, int size);
-uint8_t FlashErase(uint32_t startAddr, uint32_t endAddr);
+int     FlashRead( char *pBuf, uint32_t addr, int size);
+int     FlashWrite( char *pBuf, uint32_t addr, int size);
+int     FlashErase(uint32_t startAddr, uint32_t endAddr);
 void    FlashTest(void);
 
 #ifdef __cplusplus
