@@ -5,7 +5,7 @@
 ## 测试
     在stm32RBT6 flash:128KB ram:20KB上测试使用，其他型号请自行修改bootloader.ioc.
 
-##流程说明： 
+## 流程说明： 
 ```
 graph TB
     A1((stm32上电)) -->  B0{等待bootcmd命令}
