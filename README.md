@@ -6,6 +6,7 @@
     在stm32RBT6 flash:128KB ram:20KB上测试使用，其他型号请自行修改bootloader.ioc.
 
 ## 流程说明： 
+
 ```
 graph TB
     A1((stm32上电)) -->  B0{等待bootcmd命令}
@@ -31,8 +32,7 @@ graph TB
     E4--> F4[连续写入,每次写入小于256字节,间隔10ms]
     F4 --> |FE A5 F1| G1[结束编程] 
 ```
-
-##内存分配：
+## 内存分配：
 
 use | start addr | end addr | size
 ---|---|---|---
