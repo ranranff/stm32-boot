@@ -179,7 +179,7 @@ static void RunBootCmd(uint8_t cmd)
   */
 static void RunCmdConnection()
 {
-	  DEBUG("---------------Connection ---------");
+    DEBUG("---------------Connection ---------");
     uint8_t temp[] = {0XFE, 0XA5, 0X01, 0X03, 0XFF, 0X03, 0X00, 0X01};
     HAL_UART_Transmit(&huart1, temp, sizeof(temp)/sizeof(temp[0]), 0xFFFF);
 }
@@ -189,7 +189,7 @@ static void RunCmdConnection()
   */
 static void RunCmdEraseFlash()
 {
-	  DEBUG("--------------- Erase Flash ---------");
+    DEBUG("--------------- Erase Flash ---------");
     FlashErase(APP_BASE_ADDRESS, APP_BASE_ADDRESS + APP_OFFSET_MAX);
 }
 
@@ -266,7 +266,7 @@ static void RunCmdProgramFlash()
   */
 static void RunCmdWriteCrc()
 {
-	
+
     do
     {
         if( g_uart1RxFlag > 0 )
@@ -276,7 +276,7 @@ static void RunCmdWriteCrc()
             {
                 uint32_t crcValue = 0;
                 memcpy((uint8_t*)(&crcValue), g_bootBuff, 4);
-							  DEBUG("----------------Write crc:%04x ----------------------------\n", crcValue);
+                DEBUG("----------------Write crc:%04x ----------------------------\n", crcValue);
                 WritePrivateData( (char *)(&crcValue), sizeof(crcValue), PRIVATE_CRC_OFFSET);
                 return;
             }
@@ -289,7 +289,7 @@ static void RunCmdWriteCrc()
   */
 static void RunCmdRestart()
 {
-	  DEBUG("----------------Restart ----------------------------\n");
+    DEBUG("----------------Restart ----------------------------\n");
     HAL_NVIC_SystemReset();
 }
 
@@ -302,7 +302,7 @@ static bool WritePrivateData(char *pBuf, int size, uint32_t offset)
 {
     if( (offset + size) > PRIVATE_DATA_OFFSET_MAX)
     {
-			  ERROR("offset: %d size: %d",offset, size);
+        ERROR("offset: %d size: %d",offset, size);
         return false;
     }
 
@@ -383,8 +383,15 @@ static void RunCmdJumpToApp()
     pTempBuff = NULL;
 #endif
     DEBUG("---------------Jump To App---------");
-    //__set_PRIMASK(1);//关总中断,在app中重新开启。
-	  __disable_irq();
+	
+	 /*! 关闭一些已经打开的外设*/
+		__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
+		HAL_UART_MspDeInit(&huart1);
+		HAL_UART_MspDeInit(&huart2);
+		
+	 //__set_PRIMASK(1);//关总中断,在app中重新开启。
+    __disable_irq();
+		
     JumpToApp(APP_BASE_ADDRESS);
 }
 
