@@ -179,9 +179,9 @@ static void RunBootCmd(uint8_t cmd)
   */
 static void RunCmdConnection()
 {
+	  DEBUG("---------------Connection ---------");
     uint8_t temp[] = {0XFE, 0XA5, 0X01, 0X03, 0XFF, 0X03, 0X00, 0X01};
     HAL_UART_Transmit(&huart1, temp, sizeof(temp)/sizeof(temp[0]), 0xFFFF);
-    DEBUG("---------------Connection ---------");
 }
 
 /** @brief     flash擦除函数
@@ -189,8 +189,8 @@ static void RunCmdConnection()
   */
 static void RunCmdEraseFlash()
 {
+	  DEBUG("--------------- Erase Flash ---------");
     FlashErase(APP_BASE_ADDRESS, APP_BASE_ADDRESS + APP_OFFSET_MAX);
-    DEBUG("--------------- Erase Flash ---------");
 }
 
 /** @brief     对flash编程
@@ -248,7 +248,7 @@ static void RunCmdProgramFlash()
             {
                 FlashWrite( (char *)alignBuff, startAddr + count, alignBuffOffset);
                 count += alignBuffOffset;
-                DEBUG("----------------write flash count:%d ----------------------------\n", count);
+                DEBUG("----------------write finish :%d ----------------------------\n", count);
                 break;
             }
             DEBUG("----------------count:%d  buf size:%d  flag:%d  alignBuffOffset:%d \n", count, g_bootBuffSize, g_uart1RxFlag, alignBuffOffset);
@@ -266,6 +266,7 @@ static void RunCmdProgramFlash()
   */
 static void RunCmdWriteCrc()
 {
+	
     do
     {
         if( g_uart1RxFlag > 0 )
@@ -275,6 +276,7 @@ static void RunCmdWriteCrc()
             {
                 uint32_t crcValue = 0;
                 memcpy((uint8_t*)(&crcValue), g_bootBuff, 4);
+							  DEBUG("----------------Write crc:%04x ----------------------------\n", crcValue);
                 WritePrivateData( (char *)(&crcValue), sizeof(crcValue), PRIVATE_CRC_OFFSET);
                 return;
             }
@@ -287,6 +289,7 @@ static void RunCmdWriteCrc()
   */
 static void RunCmdRestart()
 {
+	  DEBUG("----------------Restart ----------------------------\n");
     HAL_NVIC_SystemReset();
 }
 
@@ -352,17 +355,6 @@ static bool CrcVerify()
     {
         crcValue1 = HAL_CRC_Calculate(&hcrc, (uint32_t *)APP_BASE_ADDRESS, appLen/4);
         DEBUG("crcvalue: 0x%04x ", crcValue1);
-
-        /*
-        uint32_t value = 0x101010;
-        crcValue1 = HAL_CRC_Calculate(&hcrc, &value, 1);
-        DEBUG("crcvalue: 0x%04x ", crcValue1);
-
-        uint32_t ttt[4] = {0};
-        memcpy(ttt, (uint8_t*)&value, 4);
-        crcValue1 = HAL_CRC_Calculate(&hcrc, ttt, 1);
-        DEBUG("crcvalue: 0x%04x ", crcValue1);
-        */
     }
     else
     {
@@ -390,9 +382,9 @@ static void RunCmdJumpToApp()
     free(pTempBuff);
     pTempBuff = NULL;
 #endif
-
     DEBUG("---------------Jump To App---------");
-    __set_PRIMASK(1);//关总中断,在app中重新开启。
+    //__set_PRIMASK(1);//关总中断,在app中重新开启。
+	  __disable_irq();
     JumpToApp(APP_BASE_ADDRESS);
 }
 

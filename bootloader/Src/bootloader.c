@@ -32,9 +32,9 @@ void JumpToApp(uint32_t addr)
     pFunction JumpToApplication = (pFunction) jumpAddress;            
 		
     /* Initialize user application's Stack Pointer */
-		__set_PSP(*(volatile unsigned int*) addr);
-		__set_CONTROL(0);
-		__set_MSP(*(volatile unsigned int*) addr);
+		//		__set_PSP(*(volatile unsigned int*) addr);
+		//		__set_CONTROL(0);
+		//		__set_MSP(*(volatile unsigned int*) addr);
 		
     JumpToApplication();
   }
