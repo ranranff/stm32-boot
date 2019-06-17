@@ -105,7 +105,6 @@ int main(void)
   MX_GPIO_Init();
   MX_DMA_Init();
   MX_USART1_UART_Init();
-  MX_USART2_UART_Init();
   MX_CRC_Init();
   /* USER CODE BEGIN 2 */
 	__HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);//Ê¹ÄÜidleÖÐ¶Ï

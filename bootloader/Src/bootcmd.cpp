@@ -167,6 +167,14 @@ static void RunBootCmd(uint8_t cmd)
         RunCmdJumpToApp();
         break;
     case 0xF4:
+    {
+        if(CrcVerify())
+        {
+            RunCmdJumpToApp();
+        }
+    }
+    break;
+    case 0xF5:
         RunCmdUpdateApp();
         break;
     default :
@@ -249,10 +257,12 @@ static void RunCmdProgramFlash()
                 FlashWrite( (char *)alignBuff, startAddr + count, alignBuffOffset);
                 count += alignBuffOffset;
                 DEBUG("----------------write finish :%d ----------------------------\n", count);
+							  HAL_GPIO_TogglePin(GPIOC, led3_Pin);
                 break;
             }
             DEBUG("----------------count:%d  buf size:%d  flag:%d  alignBuffOffset:%d \n", count, g_bootBuffSize, g_uart1RxFlag, alignBuffOffset);
-
+						
+            HAL_GPIO_TogglePin(GPIOC, led2_Pin);
             g_uart1RxFlag--;
         }
     }
@@ -266,7 +276,6 @@ static void RunCmdProgramFlash()
   */
 static void RunCmdWriteCrc()
 {
-
     do
     {
         if( g_uart1RxFlag > 0 )
@@ -383,15 +392,14 @@ static void RunCmdJumpToApp()
     pTempBuff = NULL;
 #endif
     DEBUG("---------------Jump To App---------");
-	
-	 /*! 关闭一些已经打开的外设*/
-		__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
-		HAL_UART_MspDeInit(&huart1);
-		HAL_UART_MspDeInit(&huart2);
-		
-	 //__set_PRIMASK(1);//关总中断,在app中重新开启。
+
+    /*! 关闭一些已经打开的外设*/
+    __HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
+    HAL_UART_MspDeInit(&huart1);
+
+    //__set_PRIMASK(1);//关总中断,在app中重新开启。
     __disable_irq();
-		
+
     JumpToApp(APP_BASE_ADDRESS);
 }
 
