@@ -5,7 +5,8 @@
 ## 测试
     在stm32RBT6 flash:128KB ram:20KB上测试使用，其他型号请自行修改bootloader.ioc.
 
-##流程说明： 
+## 流程说明： 
+
 ```
 graph TB
     A1((stm32上电)) -->  B0{等待bootcmd命令}
@@ -31,8 +32,8 @@ graph TB
     E4--> F4[连续写入,每次写入小于256字节,间隔10ms]
     F4 --> |FE A5 F1| G1[结束编程] 
 ```
+## 内存分配：
 
-##内存分配：
 use | start addr | end addr | size
 ---|---|---|---
 total| 0x08000000 | 0x0801FFFF |0x00020000
@@ -46,7 +47,7 @@ Private data| 0x801F000 | 0x0801FFFF |0x00001000
            2、按照图中1-7顺序执行。
            3、注意第四步，加载app测试程序的bin文件，在发送设置中设置每发送256字节延迟100ms，发送文件。
            4、重启后单片机三秒后执行app程序，如果没有跳转到app，请检查crc。
-![演示](docs/test.png)
+![演示](https://github.com/dengbaoan/stm32-boot/blob/master/docs/test.PNG)
 
 ## 测试
    在/test/目录下由两个bin文件可以测试使用，通过bootloader更新bin后在串口会看到不同的打印效果。
