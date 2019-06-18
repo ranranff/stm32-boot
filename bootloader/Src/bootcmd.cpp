@@ -130,7 +130,7 @@ void DoLoop()
                 }
             }
 
-            HAL_GPIO_TogglePin(GPIOD, led1_Pin);
+            HAL_GPIO_TogglePin(led1_GPIO_Port, led1_Pin);
             HAL_Delay(100);
         }
 
@@ -257,12 +257,12 @@ static void RunCmdProgramFlash()
                 FlashWrite( (char *)alignBuff, startAddr + count, alignBuffOffset);
                 count += alignBuffOffset;
                 DEBUG("----------------write finish :%d ----------------------------\n", count);
-							  HAL_GPIO_TogglePin(GPIOC, led3_Pin);
+							  HAL_GPIO_TogglePin(led3_GPIO_Port, led3_Pin);
                 break;
             }
             DEBUG("----------------count:%d  buf size:%d  flag:%d  alignBuffOffset:%d \n", count, g_bootBuffSize, g_uart1RxFlag, alignBuffOffset);
 						
-            HAL_GPIO_TogglePin(GPIOC, led2_Pin);
+            HAL_GPIO_TogglePin(led2_GPIO_Port, led2_Pin);
             g_uart1RxFlag--;
         }
     }
